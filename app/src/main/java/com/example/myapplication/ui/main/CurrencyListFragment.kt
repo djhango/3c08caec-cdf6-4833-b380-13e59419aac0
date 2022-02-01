@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.myapplication.R
+import com.example.myapplication.models.CurrencyInfo
+import java.util.*
+import kotlin.collections.ArrayList
 
-class CurrencyListFragment : Fragment() {
+class CurrencyListFragment(val dataset: ArrayList<CurrencyInfo>) : Fragment() {
 
     companion object {
-        fun newInstance() = CurrencyListFragment()
+        fun newInstance(dataset: ArrayList<CurrencyInfo>) = CurrencyListFragment(dataset)
     }
 
     private lateinit var viewModel: CurrencyListViewModel
@@ -23,10 +26,9 @@ class CurrencyListFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CurrencyListViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this).get(CurrencyListViewModel(dataset)::class.java)
         // TODO: Use the ViewModel
     }
-
 }
