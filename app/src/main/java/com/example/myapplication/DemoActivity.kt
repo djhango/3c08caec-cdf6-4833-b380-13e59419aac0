@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.LiveData
 import com.example.myapplication.ui.main.CurrencyListFragment
 import com.example.myapplication.models.CurrencyInfo
 import com.example.myapplication.services.implementations.DatabaseService
@@ -19,11 +20,13 @@ class DemoActivity : AppCompatActivity() {
 
         val app = startKoin{modules(databaseService)}
 
-        val dataset: ArrayList<CurrencyInfo> = app.koin.get<DatabaseService>().getCurrencyList()
+        val databaseServiceImpl = app.koin.get<IDatabaseService>()
+
+        val dataset: LiveData<List<CurrencyInfo>> = databaseServiceImpl.getCurrencyList(databaseServiceImpl.getDatabase(application))
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, CurrencyListFragment.newInstance(dataset))
+                .replace(R.id.container, CurrencyListFragment.newInstance(dataset.value!!))
                 .commitNow()
         }
     }
